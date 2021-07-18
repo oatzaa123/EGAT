@@ -85,6 +85,12 @@ func (g *Chargers) GetChargers() ([]map[string]interface{}, error) {
 		},
 		{
 			"$unwind": bson.M{
+				"path":                       "$network_data",
+				"preserveNullAndEmptyArrays": true,
+			},
+		},
+		{
+			"$unwind": bson.M{
 				"path":                       "$charger_model",
 				"preserveNullAndEmptyArrays": true,
 			},
@@ -104,9 +110,24 @@ func (g *Chargers) GetChargers() ([]map[string]interface{}, error) {
 				"cod_date":          1,
 				"transformer":       1,
 				"connector_status":  1,
-				"station":           1,
-				"station.network":   "$network_data",
-				"charger_model":     1,
+				"station": bson.M{
+					"address":            1,
+					"area":               1,
+					"cod_date":           1,
+					"construction_date":  1,
+					"contact":            1,
+					"contact_person":     1,
+					"contact_tel":        1,
+					"coordinate":         1,
+					"landmark":           1,
+					"name_en":            1,
+					"name_th":            1,
+					"open_houer_weekday": 1,
+					"open_houer_weekend": 1,
+					"parking_lots":       1,
+					"network":            "$network_data",
+				},
+				"charger_model": 1,
 			},
 		},
 	}
