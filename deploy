@@ -1,0 +1,1 @@
+scp main root@api.pumpcharge.com:/root/go-callcenter/bin/main
