@@ -8,15 +8,15 @@ import (
 
 // PrivateRoute comment
 func PrivateRoute(g *echo.Group) {
-	g.GET("/station/getStations", getStations)
+	g.GET("/station/getStation", getStation)
 }
 
-func getStations(c echo.Context) error {
+func getStation(c echo.Context) error {
 	var (
 		payload stations.Stations
 	)
 
-	result, err := payload.GetStations()
+	result, err := payload.GetStation()
 	if err != nil {
 		return c.JSON(500, echo.Map{
 			"status": false,

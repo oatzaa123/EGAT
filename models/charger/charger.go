@@ -14,6 +14,24 @@ var (
 	ctx = context.Background()
 )
 
+type Charger_model struct {
+	ID            primitive.ObjectID `bson:"id" json:"id"`
+	Brand         string             `bson:"brand" json:"brand"`
+	Model         string             `bson:"model" json:"model"`
+	Charging_type string             `bson:"charging_type" json:"charging_type"`
+	Kw_rated      int32              `bson:"kw_rated" json:"kw_rated"`
+	Connector     []connector        `bson:"connector" json:"connector"`
+}
+
+type connector struct {
+	ID            int32 `bson:"id" json:"id"`
+	Connector     int32 `bson:"connector" json:"connector"`
+	Kw_rated      int32 `bson:"kw_rated" json:"kw_rated"`
+	Type          int32 `bson:"type" json:"type"`
+	Image         int32 `bson:"image" json:"image"`
+	Charging_type int32 `bson:"charging_type" json:"charging_type"`
+}
+
 type Chargers struct {
 	ID                primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
 	Station_id        primitive.ObjectID `bson:"station_id,omitempty" json:"station_id"`

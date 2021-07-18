@@ -53,20 +53,48 @@ type contact struct {
 	Line      string `bson:"line" json:"line"`
 }
 
-func (g *Stations) GetStations() ([]map[string]interface{}, error) {
+func (g *Stations) GetStation() ([]map[string]interface{}, error) {
 	collection := database.MongoClient.Database(keys.Database).Collection("stations")
+	objID, err := primitive.ObjectIDFromHex("60f298311376ed0e560243f4")
 	aggregateStage := []bson.M{
+		{
+			"$match": bson.M{
+				"_id": objID,
+			},
+		},
 		{
 			"$lookup": bson.M{
 				"from":         "networks",
 				"localField":   "network",
 				"foreignField": "_id",
-				"as":           "data",
+				"as":           "networks",
+			},
+		},
+		{
+			"$lookup": bson.M{
+				"from":         "chargers",
+				"localField":   "_id",
+				"foreignField": "station_id",
+				"as":           "chargers",
+			},
+		},
+		{
+			"$lookup": bson.M{
+				"from":         "charger_models",
+				"localField":   "chargers.id",
+				"foreignField": "id",
+				"as":           "charger_models",
 			},
 		},
 		{
 			"$unwind": bson.M{
-				"path":                       "$data",
+				"path":                       "$charger_models",
+				"preserveNullAndEmptyArrays": true,
+			},
+		},
+		{
+			"$unwind": bson.M{
+				"path":                       "$networks",
 				"preserveNullAndEmptyArrays": true,
 			},
 		},
@@ -87,6 +115,12 @@ func (g *Stations) GetStations() ([]map[string]interface{}, error) {
 				"contact_tel":        1,
 				"parking_lots":       1,
 				"network":            "$data.name_th",
+				"chargers": bson.M{
+					"charger_no":       1,
+					"connector_status": 1,
+
+					"charger_models": "$charger_models.model",
+				},
 			},
 		},
 	}
