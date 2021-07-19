@@ -114,7 +114,7 @@ func (g *Stations) GetStation() ([]map[string]interface{}, error) {
 				"contact_person":     1,
 				"contact_tel":        1,
 				"parking_lots":       1,
-				"network":            "$data.name_th",
+				"network":            "$networks.name_th",
 				"chargers": bson.M{
 					"charger_no":       1,
 					"connector_status": 1,
